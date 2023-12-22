@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace ApiClients\Tools\OpenApiClientGenerator\State;
+namespace OpenAPITools\Utils\State;
 
 final readonly class File
 {

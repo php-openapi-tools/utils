@@ -2,9 +2,7 @@
 
 declare(strict_types=1);
 
-namespace ApiClients\Tools\OpenApiClientGenerator;
-
-use ApiClients\Tools\OpenApiClientGenerator\Configuration\Namespace_;
+namespace OpenAPITools\Utils;
 
 use function trim;
 
@@ -12,10 +10,14 @@ final readonly class ClassString
 {
     public static function factory(Namespace_ $namespace, string $relative): self
     {
-        $relative       = trim(Utils::className($relative), '\\');
+        $namespace      = new Namespace_(
+            trim($namespace->source, '\\'),
+            trim($namespace->test, '\\'),
+        );
+        $relative       = Utils::className($relative);
         $fullyQualified = new Namespace_(
-            Utils::cleanUpNamespace(trim($namespace->source, '\\') . '\\' . $relative),
-            Utils::cleanUpNamespace(trim($namespace->test, '\\') . '\\' . $relative),
+            Utils::cleanUpNamespace($namespace->source . '\\' . $relative),
+            Utils::cleanUpNamespace($namespace->test . '\\' . $relative),
         );
 
         return new self(
@@ -31,7 +33,7 @@ final readonly class ClassString
     }
 
     private function __construct(
-        public Namespace_ $baseNamespaces,
+        public Namespace_ $baseNamespace,
         public Namespace_ $namespace,
         public Namespace_ $fullyQualified,
         public string $relative,

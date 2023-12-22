@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace ApiClients\Tools\OpenApiClientGenerator;
+namespace OpenAPITools\Utils;
 
 use PhpParser\Node;
 

@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
-namespace ApiClients\Tools\OpenApiClientGenerator;
+namespace OpenAPITools\Utils;
 
 use Jawira\CaseConverter\Convert;
 
+use function array_keys;
 use function array_map;
 use function basename;
 use function count;
@@ -19,12 +20,17 @@ use function trim;
 
 final class Utils
 {
+    private const KEYWORD_COMPARISON     = false;
+    public const RESERVED_KEYWORDS       = ['__halt_compiler', 'abstract', 'and', 'array', 'as', 'break', 'callable', 'case', 'catch', 'class', 'clone', 'const', 'continue', 'declare', 'default', 'die', 'do', 'echo', 'else', 'elseif', 'empty', 'enddeclare', 'endfor', 'endforeach', 'endif', 'endswitch', 'endwhile', 'eval', 'exit', 'extends', 'final', 'for', 'foreach', 'function', 'global', 'goto', 'if', 'implements', 'include', 'include_once', 'instanceof', 'insteadof', 'interface', 'isset', 'list', 'namespace', 'new', 'or', 'print', 'private', 'protected', 'public', 'require', 'require_once', 'return', 'static', 'switch', 'throw', 'trait', 'try', 'unset', 'use', 'var', 'while', 'xor', 'self', 'parent', 'object'];
+    public const CLASS_NAME_REPLACE      = ['{' => ' ', '}' => ' ', '-' => '_', '$' => '_', '+' => '_', '*' => '_', '.' => '_', ';' => '_', '=' => '_', ' ' => '_'];
+    public const CLEAN_UP_STRING_REPLACE = ['{' => ' ', '}' => ' ', '-' => '_', '$' => '_', '+' => '_', '*' => '_', '.' => '_', ';' => '_', '=' => '_', ' ' => '_', '/' => '_', '\\' => '_'];
+
     public static function cleanUpString(string $string): string
     {
-        return str_replace(
-            ['{', '}', '-', '$', '+', '*', '.', ';', '=', ' ', '/', '\\', ';', ' '],
-            ['', '', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_'],
-            self::fixKeyword(
+        return self::fixKeyword(
+            str_replace(
+                array_keys(self::CLEAN_UP_STRING_REPLACE),
+                self::CLEAN_UP_STRING_REPLACE,
                 $string,
             ),
         );
@@ -33,8 +39,8 @@ final class Utils
     public static function className(string $className): string
     {
         $className = str_replace(
-            ['{', '}', '-', '$', '+', '*', '.', ';', '=', ' '],
-            ['', '', '_', '_', '_', '_', '_', '_', '_', '_'],
+            array_keys(self::CLASS_NAME_REPLACE),
+            self::CLASS_NAME_REPLACE,
             $className,
         );
 
@@ -94,8 +100,8 @@ final class Utils
         /** @phpstan-ignore-next-line */
         return $name . (in_array(
             strtolower($nameBoom[count($nameBoom) - 1]),
-            ['__halt_compiler', 'abstract', 'and', 'array', 'as', 'break', 'callable', 'case', 'catch', 'class', 'clone', 'const', 'continue', 'declare', 'default', 'die', 'do', 'echo', 'else', 'elseif', 'empty', 'enddeclare', 'endfor', 'endforeach', 'endif', 'endswitch', 'endwhile', 'eval', 'exit', 'extends', 'final', 'for', 'foreach', 'function', 'global', 'goto', 'if', 'implements', 'include', 'include_once', 'instanceof', 'insteadof', 'interface', 'isset', 'list', 'namespace', 'new', 'or', 'print', 'private', 'protected', 'public', 'require', 'require_once', 'return', 'static', 'switch', 'throw', 'trait', 'try', 'unset', 'use', 'var', 'while', 'xor', 'self', 'parent', 'object'],
-            false,
+            self::RESERVED_KEYWORDS,
+            self::KEYWORD_COMPARISON,
         ) ? '_' : '');
     }
 }
