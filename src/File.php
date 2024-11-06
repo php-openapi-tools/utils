@@ -12,6 +12,7 @@ final readonly class File
         public string $pathPrefix,
         public string $fqcn,
         public Node|string $contents,
+        public bool $loadOnWrite,
     ) {
     }
 }
