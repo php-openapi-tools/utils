@@ -39,7 +39,10 @@ final class State
 
     public static function serialize(State $state): string
     {
-        return json_encode((new ObjectMapperUsingReflection())->serializeObject($state));
+        return json_encode(
+            (new ObjectMapperUsingReflection())->serializeObject($state),
+            JSON_PRETTY_PRINT,
+        );
     }
 
     /** @internal */
