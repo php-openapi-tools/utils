@@ -8,7 +8,7 @@ use PhpParser\Node;
 
 final readonly class File
 {
-    public const DO_LOAD_ON_WRITE = true;
+    public const DO_LOAD_ON_WRITE     = true;
     public const DO_NOT_LOAD_ON_WRITE = false;
 
     public function __construct(
