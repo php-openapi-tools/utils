@@ -10,11 +10,12 @@
     ],
     "require": {
         "php": "^8.2",
+        "ext-json": "^8.2",
         "eventsauce/object-hydrator": "^1.4",
         "jawira/case-converter": "^3.5"
     },
     "require-dev": {
-        "wyrihaximus/test-utilities": "^5.6"
+        "wyrihaximus/test-utilities": "^6.0.10"
     },
     "autoload": {
         "psr-4": {

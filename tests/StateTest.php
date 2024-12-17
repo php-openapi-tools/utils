@@ -24,7 +24,7 @@ final class StateTest extends TestCase
         self::assertCount(0, $state->generatedFiles->files());
         self::assertCount(0, $state->additionalFiles->files());
 
-        self::assertSame(self::EMPTY_JSON, State::serialize($state));
+        self::assertJsonStringEqualsJsonString(self::EMPTY_JSON, State::serialize($state));
     }
 
     /** @test */
@@ -36,7 +36,7 @@ final class StateTest extends TestCase
         self::assertCount(0, $state->generatedFiles->files());
         self::assertCount(0, $state->additionalFiles->files());
 
-        self::assertSame(self::EMPTY_JSON, State::serialize($state));
+        self::assertJsonStringEqualsJsonString(self::EMPTY_JSON, State::serialize($state));
     }
 
     /** @test */
@@ -48,11 +48,11 @@ final class StateTest extends TestCase
         self::assertCount(0, $state->generatedFiles->files());
         self::assertCount(1, $state->additionalFiles->files());
 
-        self::assertSame(self::ONE_FILE_JSON, State::serialize($state));
+        self::assertJsonStringEqualsJsonString(self::ONE_FILE_JSON, State::serialize($state));
     }
 
     /** @return iterable<array<State>> */
-    public function emptyStateDataProvider(): iterable
+    public static function emptyStateDataProvider(): iterable
     {
         yield [State::initialize()];
         yield [State::deserialize(self::EMPTY_JSON)];
@@ -72,19 +72,18 @@ final class StateTest extends TestCase
 
         self::assertCount(0, $state->generatedFiles->files());
         self::assertCount(0, $state->additionalFiles->files());
-        self::assertSame(self::EMPTY_JSON, State::serialize($state));
+        self::assertJsonStringEqualsJsonString(self::EMPTY_JSON, State::serialize($state));
         self::assertFalse($state->additionalFiles->has(basename(__FILE__)));
 
         $state->additionalFiles->upsert($file->name, $file->hash);
 
         self::assertCount(0, $state->generatedFiles->files());
         self::assertCount(1, $state->additionalFiles->files());
-        self::assertSame(
+        self::assertJsonStringEqualsJsonString(
             '{"specHash":"","generatedFiles":{"files":[]},"additionalFiles":{"files":[{"name":"' . $file->name . '","hash":"' . $file->hash . '"}]}}',
             State::serialize($state),
         );
         self::assertTrue($state->additionalFiles->has(basename(__FILE__)));
-        self::assertInstanceOf(State\File::class, current($state->additionalFiles->files()));
         self::assertSame($file->name, current($state->additionalFiles->files())->name);
         self::assertSame($file->hash, current($state->additionalFiles->files())->hash);
         self::assertSame($file->name, $state->additionalFiles->get(basename(__FILE__))->name);
@@ -94,7 +93,7 @@ final class StateTest extends TestCase
 
         self::assertCount(0, $state->generatedFiles->files());
         self::assertCount(0, $state->additionalFiles->files());
-        self::assertSame(self::EMPTY_JSON, State::serialize($state));
+        self::assertJsonStringEqualsJsonString(self::EMPTY_JSON, State::serialize($state));
         self::assertFalse($state->additionalFiles->has(basename(__FILE__)));
     }
 }

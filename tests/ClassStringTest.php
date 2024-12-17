@@ -11,7 +11,7 @@ use WyriHaximus\TestUtilities\TestCase;
 final class ClassStringTest extends TestCase
 {
     /** @return iterable<array<Namespace_|string>> */
-    public function factoryDataProvider(): iterable
+    public static function factoryDataProvider(): iterable
     {
         yield [
             new Namespace_(

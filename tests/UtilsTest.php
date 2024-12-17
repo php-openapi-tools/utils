@@ -14,10 +14,10 @@ use function strtolower;
 final class UtilsTest extends TestCase
 {
     /** @return iterable<array<string>> */
-    public function cleanUpStringDataProvider(): iterable
+    public static function cleanUpStringDataProvider(): iterable
     {
         foreach (Utils::CLEAN_UP_STRING_REPLACE as $badChar) {
-            foreach ($this->prepareReservedKeywords() as $rawForbiddenKeyword => $forbiddenKeyword) {
+            foreach (self::prepareReservedKeywords() as $rawForbiddenKeyword => $forbiddenKeyword) {
                 yield [
                     $badChar . $rawForbiddenKeyword,
                     '_' . $rawForbiddenKeyword,
@@ -46,10 +46,10 @@ final class UtilsTest extends TestCase
     }
 
     /** @return iterable<array<string>> */
-    public function classNameDataProvider(): iterable
+    public static function classNameDataProvider(): iterable
     {
         foreach (array_keys(Utils::CLASS_NAME_REPLACE) as $badChar) {
-            foreach ($this->prepareReservedKeywords() as $rawForbiddenKeyword => $forbiddenKeyword) {
+            foreach (self::prepareReservedKeywords() as $rawForbiddenKeyword => $forbiddenKeyword) {
                 yield [
                     $rawForbiddenKeyword,
                     $forbiddenKeyword . (strtolower($forbiddenKeyword) === $rawForbiddenKeyword ? '_' : ''),
@@ -83,7 +83,7 @@ final class UtilsTest extends TestCase
     }
 
     /** @return iterable<array<string>> */
-    public function cleanUpNamespaceDataProvider(): iterable
+    public static function cleanUpNamespaceDataProvider(): iterable
     {
         yield ['Namespace/Sub/ClassName', '\Namespace\Sub\ClassName'];
         yield ['Namespace/\Sub/\ClassName', '\Namespace\Sub\ClassName'];
@@ -131,9 +131,9 @@ final class UtilsTest extends TestCase
     }
 
     /** @return iterable<array<string>> */
-    public function fixKeywordDataProvider(): iterable
+    public static function fixKeywordDataProvider(): iterable
     {
-        foreach ($this->prepareReservedKeywords() as $rawForbiddenKeyword => $forbiddenKeyword) {
+        foreach (self::prepareReservedKeywords() as $rawForbiddenKeyword => $forbiddenKeyword) {
             yield [$rawForbiddenKeyword, $rawForbiddenKeyword . '_'];
             yield ['Namespace/Sub/' . $rawForbiddenKeyword, 'Namespace\Sub\\' . $rawForbiddenKeyword . '_'];
             yield [$rawForbiddenKeyword . '/' . $rawForbiddenKeyword, $rawForbiddenKeyword . '\\' . $rawForbiddenKeyword . '_'];
@@ -150,7 +150,7 @@ final class UtilsTest extends TestCase
     }
 
     /** @return iterable<string, string> */
-    private function prepareReservedKeywords(): iterable
+    private static function prepareReservedKeywords(): iterable
     {
         foreach (Utils::RESERVED_KEYWORDS as $reservedKeyword) {
             yield $reservedKeyword => (new Convert($reservedKeyword))->toPascal();
