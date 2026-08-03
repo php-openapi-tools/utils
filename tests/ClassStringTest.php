@@ -6,6 +6,8 @@ namespace OpenAPITools\Tests\Utils;
 
 use OpenAPITools\Utils\ClassString;
 use OpenAPITools\Utils\Namespace_;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use WyriHaximus\TestUtilities\TestCase;
 
 final class ClassStringTest extends TestCase
@@ -16,56 +18,54 @@ final class ClassStringTest extends TestCase
         yield [
             new Namespace_(
                 'OpenAPITools\Utils',
-                'ApiClients\Tests\Tools\Utils',
+                'OpenAPITools\Tests\Tools\Utils',
             ),
             'ClassString',
             'ClassString',
             'ClassString',
             'OpenAPITools\Utils',
-            'ApiClients\Tests\Tools\Utils',
+            'OpenAPITools\Tests\Tools\Utils',
             'OpenAPITools\Utils',
-            'ApiClients\Tests\Tools\Utils',
-            '\OpenAPITools\Utils\ClassString',
-            '\ApiClients\Tests\Tools\Utils\ClassString',
+            'OpenAPITools\Tests\Tools\Utils',
+            ClassString::NAMESPACE_SEPARATOR . ClassString::class,
+            '\OpenAPITools\Tests\Tools\Utils\ClassString',
         ];
 
         yield [
             new Namespace_(
                 'OpenAPITools',
-                'ApiClients\Tests\Tools',
+                'OpenAPITools\Tests\Tools',
             ),
             'Utils\ClassString',
             'Utils\ClassString',
             'ClassString',
             'OpenAPITools',
-            'ApiClients\Tests\Tools',
+            'OpenAPITools\Tests\Tools',
             'OpenAPITools\Utils',
-            'ApiClients\Tests\Tools\Utils',
-            '\OpenAPITools\Utils\ClassString',
-            '\ApiClients\Tests\Tools\Utils\ClassString',
+            'OpenAPITools\Tests\Tools\Utils',
+            ClassString::NAMESPACE_SEPARATOR . ClassString::class,
+            '\OpenAPITools\Tests\Tools\Utils\ClassString',
         ];
 
         yield [
             new Namespace_(
                 '\OpenAPITools\\',
-                '\ApiClients\Tests\Tools\\',
+                '\OpenAPITools\Tests\Tools\\',
             ),
             '\Utils\ClassString\\',
             'Utils\ClassString',
             'ClassString',
             'OpenAPITools',
-            'ApiClients\Tests\Tools',
+            'OpenAPITools\Tests\Tools',
             'OpenAPITools\Utils',
-            'ApiClients\Tests\Tools\Utils',
-            '\OpenAPITools\Utils\ClassString',
-            '\ApiClients\Tests\Tools\Utils\ClassString',
+            'OpenAPITools\Tests\Tools\Utils',
+            ClassString::NAMESPACE_SEPARATOR . ClassString::class,
+            '\OpenAPITools\Tests\Tools\Utils\ClassString',
         ];
     }
 
-    /**
-     * @test
-     * @dataProvider factoryDataProvider
-     */
+    #[Test]
+    #[DataProvider('factoryDataProvider')]
     public function factory(Namespace_ $namespace, string $rawRelative, string $relative, string $className, string $baseNamespaceSource, string $baseNamespaceTest, string $namespaceSource, string $namespaceTest, string $fullyQualifiedSource, string $fullyQualifiedTest): void
     {
         $classString = ClassString::factory($namespace, $rawRelative);

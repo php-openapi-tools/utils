@@ -6,18 +6,27 @@ namespace OpenAPITools\Utils;
 
 use function trim;
 
+/** @api */
 final readonly class ClassString
 {
+    public const string NAMESPACE_SEPARATOR = '\\';
+
     public static function factory(Namespace_ $namespace, string $relative): self
     {
         $namespace      = new Namespace_(
-            trim($namespace->source, '\\'),
-            trim($namespace->test, '\\'),
+            trim($namespace->source, self::NAMESPACE_SEPARATOR),
+            trim($namespace->test, self::NAMESPACE_SEPARATOR),
         );
         $relative       = Utils::className($relative);
         $fullyQualified = new Namespace_(
-            Utils::cleanUpNamespace($namespace->source . '\\' . $relative),
-            Utils::cleanUpNamespace($namespace->test . '\\' . $relative),
+            self::NAMESPACE_SEPARATOR . trim(
+                Utils::cleanUpNamespace($namespace->source . self::NAMESPACE_SEPARATOR . $relative),
+                self::NAMESPACE_SEPARATOR,
+            ),
+            self::NAMESPACE_SEPARATOR . trim(
+                Utils::cleanUpNamespace($namespace->test . self::NAMESPACE_SEPARATOR . $relative),
+                self::NAMESPACE_SEPARATOR,
+            ),
         );
 
         return new self(

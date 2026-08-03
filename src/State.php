@@ -17,11 +17,12 @@ use function json_last_error;
 
 use const JSON_PRETTY_PRINT;
 
-final class State
+/** @api */
+final readonly class State
 {
     public static function initialize(): State
     {
-        return (new ObjectMapperUsingReflection())->hydrateObject(
+        return new ObjectMapperUsingReflection()->hydrateObject(
             self::class,
             [
                 'specHash' => '',
@@ -43,7 +44,7 @@ final class State
             throw new RuntimeException('Provided state is not a valid JSON object');
         }
 
-        return (new ObjectMapperUsingReflection())->hydrateObject(
+        return new ObjectMapperUsingReflection()->hydrateObject(
             self::class,
             $state,
         );
@@ -52,7 +53,7 @@ final class State
     public static function serialize(State $state): string
     {
         $json = json_encode(
-            (new ObjectMapperUsingReflection())->serializeObject($state),
+            new ObjectMapperUsingReflection()->serializeObject($state),
             JSON_PRETTY_PRINT,
         );
 

@@ -6,6 +6,8 @@ namespace OpenAPITools\Tests\Utils;
 
 use Jawira\CaseConverter\Convert;
 use OpenAPITools\Utils\Utils;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use WyriHaximus\TestUtilities\TestCase;
 
 use function array_keys;
@@ -36,10 +38,8 @@ final class UtilsTest extends TestCase
         }
     }
 
-    /**
-     * @test
-     * @dataProvider cleanUpStringDataProvider
-     */
+    #[Test]
+    #[DataProvider('cleanUpStringDataProvider')]
     public function cleanUpString(string $input, string $expectedOutput): void
     {
         self::assertSame($expectedOutput, Utils::cleanUpString($input));
@@ -73,10 +73,8 @@ final class UtilsTest extends TestCase
         }
     }
 
-    /**
-     * @test
-     * @dataProvider classNameDataProvider
-     */
+    #[Test]
+    #[DataProvider('classNameDataProvider')]
     public function className(string $input, string $expectedOutput): void
     {
         self::assertSame($expectedOutput, Utils::className($input));
@@ -103,28 +101,26 @@ final class UtilsTest extends TestCase
         yield ['Namespace////Sub////ClassName\\\\', '\Namespace\Sub\ClassName'];
     }
 
-    /**
-     * @test
-     * @dataProvider cleanUpNamespaceDataProvider
-     */
+    #[Test]
+    #[DataProvider('cleanUpNamespaceDataProvider')]
     public function cleanUpNamespace(string $input, string $expectedOutput): void
     {
         self::assertSame($expectedOutput, Utils::cleanUpNamespace($input));
     }
 
-    /** @test */
+    #[Test]
     public function fqcn(): void
     {
         self::assertSame('Namespace\ClassName', Utils::fqcn('Namespace/ClassName'));
     }
 
-    /** @test */
+    #[Test]
     public function dirname(): void
     {
         self::assertSame('Namespace', Utils::dirname('Namespace\ClassName'));
     }
 
-    /** @test */
+    #[Test]
     public function basename(): void
     {
         self::assertSame('ClassName', Utils::basename('Namespace\ClassName'));
@@ -140,10 +136,8 @@ final class UtilsTest extends TestCase
         }
     }
 
-    /**
-     * @test
-     * @dataProvider fixKeywordDataProvider
-     */
+    #[Test]
+    #[DataProvider('fixKeywordDataProvider')]
     public function fixKeyword(string $input, string $expectedOutput): void
     {
         self::assertSame($expectedOutput, Utils::fixKeyword($input));
@@ -153,7 +147,7 @@ final class UtilsTest extends TestCase
     private static function prepareReservedKeywords(): iterable
     {
         foreach (Utils::RESERVED_KEYWORDS as $reservedKeyword) {
-            yield $reservedKeyword => (new Convert($reservedKeyword))->toPascal();
+            yield $reservedKeyword => new Convert($reservedKeyword)->toPascal();
         }
     }
 }

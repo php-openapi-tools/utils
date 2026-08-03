@@ -18,12 +18,13 @@ use function str_replace;
 use function strtolower;
 use function trim;
 
+/** @api */
 final class Utils
 {
-    private const KEYWORD_COMPARISON     = false;
-    public const RESERVED_KEYWORDS       = ['__halt_compiler', 'abstract', 'and', 'array', 'as', 'break', 'callable', 'case', 'catch', 'class', 'clone', 'const', 'continue', 'declare', 'default', 'die', 'do', 'echo', 'else', 'elseif', 'empty', 'enddeclare', 'endfor', 'endforeach', 'endif', 'endswitch', 'endwhile', 'eval', 'exit', 'extends', 'final', 'for', 'foreach', 'function', 'global', 'goto', 'if', 'implements', 'include', 'include_once', 'instanceof', 'insteadof', 'interface', 'isset', 'list', 'namespace', 'new', 'or', 'print', 'private', 'protected', 'public', 'require', 'require_once', 'return', 'static', 'switch', 'throw', 'trait', 'try', 'unset', 'use', 'var', 'while', 'xor', 'self', 'parent', 'object', 'int', 'float', 'string', 'true', 'false', 'null', 'void', 'iterable', 'mixed', 'never'];
-    public const CLASS_NAME_REPLACE      = ['{' => ' ', '}' => ' ', '-' => '_', '$' => '_', '+' => '_', '*' => '_', '.' => '_', ';' => '_', '=' => '_', ' ' => '_'];
-    public const CLEAN_UP_STRING_REPLACE = ['{' => ' ', '}' => ' ', '-' => '_', '$' => '_', '+' => '_', '*' => '_', '.' => '_', ';' => '_', '=' => '_', ' ' => '_', '/' => '_', '\\' => '_'];
+    private const bool KEYWORD_COMPARISON      = false;
+    public const array RESERVED_KEYWORDS       = ['__halt_compiler', 'abstract', 'and', 'array', 'as', 'break', 'callable', 'case', 'catch', 'class', 'clone', 'const', 'continue', 'declare', 'default', 'die', 'do', 'echo', 'else', 'elseif', 'empty', 'enddeclare', 'endfor', 'endforeach', 'endif', 'endswitch', 'endwhile', 'eval', 'exit', 'extends', 'final', 'for', 'foreach', 'function', 'global', 'goto', 'if', 'implements', 'include', 'include_once', 'instanceof', 'insteadof', 'interface', 'isset', 'list', 'namespace', 'new', 'or', 'print', 'private', 'protected', 'public', 'require', 'require_once', 'return', 'static', 'switch', 'throw', 'trait', 'try', 'unset', 'use', 'var', 'while', 'xor', 'self', 'parent', 'object', 'int', 'float', 'string', 'true', 'false', 'null', 'void', 'iterable', 'mixed', 'never'];
+    public const array CLASS_NAME_REPLACE      = ['{' => ' ', '}' => ' ', '-' => '_', '$' => '_', '+' => '_', '*' => '_', '.' => '_', ';' => '_', '=' => '_', ' ' => '_'];
+    public const array CLEAN_UP_STRING_REPLACE = ['{' => ' ', '}' => ' ', '-' => '_', '$' => '_', '+' => '_', '*' => '_', '.' => '_', ';' => '_', '=' => '_', ' ' => '_', '/' => '_', '\\' => '_'];
 
     public static function cleanUpString(string $string): string
     {
@@ -48,7 +49,7 @@ final class Utils
             '\\',
             array_map(
                 static fn (string $chunk): string => self::fixKeyword(
-                    (new Convert($chunk))->toPascal(),
+                    new Convert($chunk)->toPascal(),
                 ),
                 explode(
                     '\\',
@@ -97,11 +98,13 @@ final class Utils
         $name     = self::fqcn($name);
         $nameBoom = explode('\\', $name);
 
-        /** @phpstan-ignore-next-line */
-        return $name . (in_array(
-            strtolower($nameBoom[count($nameBoom) - 1]),
-            self::RESERVED_KEYWORDS,
-            self::KEYWORD_COMPARISON,
-        ) ? '_' : '');
+        return $name . (
+            /** @phpstan-ignore function.strict */
+            in_array(
+                strtolower($nameBoom[count($nameBoom) - 1]),
+                self::RESERVED_KEYWORDS,
+                self::KEYWORD_COMPARISON,
+            ) ? '_' : ''
+        );
     }
 }
