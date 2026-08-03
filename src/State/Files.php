@@ -7,6 +7,7 @@ namespace OpenAPITools\Utils\State;
 use function array_key_exists;
 use function array_values;
 
+/** @api */
 final class Files
 {
     /** @var array<File> $files */
@@ -41,7 +42,7 @@ final class Files
         unset($this->files[$fileName]);
     }
 
-    /** @return array<File> */
+    /** @return list<File> */
     public function files(): array
     {
         return array_values($this->files);

@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace OpenAPITools\Tests\Utils;
 
 use OpenAPITools\Utils\State;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use WyriHaximus\TestUtilities\TestCase;
 
 use function basename;
@@ -12,10 +14,10 @@ use function current;
 
 final class StateTest extends TestCase
 {
-    private const EMPTY_JSON    = '{"specHash":"","generatedFiles":{"files":[]},"additionalFiles":{"files":[]}}';
-    private const ONE_FILE_JSON = '{"specHash":"","generatedFiles":{"files":[]},"additionalFiles":{"files":[{"name":"StateTest.php","hash":"bef729dcdda9be9df5af3a1f3f50873e"}]}}';
+    private const string EMPTY_JSON    = '{"specHash":"","generatedFiles":{"files":[]},"additionalFiles":{"files":[]}}';
+    private const string ONE_FILE_JSON = '{"specHash":"","generatedFiles":{"files":[]},"additionalFiles":{"files":[{"name":"StateTest.php","hash":"bef729dcdda9be9df5af3a1f3f50873e"}]}}';
 
-    /** @test */
+    #[Test]
     public function initialize(): void
     {
         $state = State::initialize();
@@ -27,7 +29,7 @@ final class StateTest extends TestCase
         self::assertJsonStringEqualsJsonString(self::EMPTY_JSON, State::serialize($state));
     }
 
-    /** @test */
+    #[Test]
     public function deserializeEmpty(): void
     {
         $state = State::deserialize(self::EMPTY_JSON);
@@ -39,7 +41,7 @@ final class StateTest extends TestCase
         self::assertJsonStringEqualsJsonString(self::EMPTY_JSON, State::serialize($state));
     }
 
-    /** @test */
+    #[Test]
     public function deserializeOneFile(): void
     {
         $state = State::deserialize(self::ONE_FILE_JSON);
@@ -58,10 +60,8 @@ final class StateTest extends TestCase
         yield [State::deserialize(self::EMPTY_JSON)];
     }
 
-    /**
-     * @test
-     * @dataProvider emptyStateDataProvider
-     */
+    #[Test]
+    #[DataProvider('emptyStateDataProvider')]
     public function operations(State $state): void
     {
         $file  = new State\File(
