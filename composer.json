@@ -15,7 +15,7 @@
     "jawira/case-converter": "^3.6.0"
   },
   "require-dev": {
-    "wyrihaximus/async-test-utilities": "^14.1.0",
+    "wyrihaximus/async-test-utilities": "^14.2.0",
     "wyrihaximus/makefiles": "^0.14.7"
   },
   "autoload": {
